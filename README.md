@@ -75,11 +75,9 @@ GET /api/books → Fetch all books.
 
 POST /api/books → Add a new book.
 
-GET /api/books/:id → Get a book by its ID.
+PATCH /api/books/book/:id → Update a book.
 
-PUT /api/books/:id → Update a book.
-
-DELETE /api/books/:id → Delete a book.
+DELETE /api/books/book/:id → Delete a book.
 
 
 
