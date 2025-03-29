@@ -11,7 +11,7 @@ const PrivateRoute: React.FC<TypeOfPageProps> = ({children}) => {
 
   const {token} = useSelector((state: RootState)=>state.authentication);
 
-  return token ?  (children) : <Navigate to="/login"/>;
+  return token ?  (children) : <Navigate to="/login" replace/>;
 
 }
 

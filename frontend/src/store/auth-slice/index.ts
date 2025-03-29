@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { deleteUserCookies, getUserFromCookies } from "../../utils/storage";
 
 export type TypeOfInitialState = {
   name: string;
@@ -6,10 +7,12 @@ export type TypeOfInitialState = {
   token: string;
 };
 
+const getUserData = getUserFromCookies();
+
 const initialState: TypeOfInitialState = {
-  name: "",
-  email: "",
-  token: "",
+  name: getUserData?.name || "",
+  email: getUserData?.email || "",
+  token: getUserData?.token || "",
 };
 
 const autSlice = createSlice({
@@ -17,6 +20,7 @@ const autSlice = createSlice({
   initialState,
   reducers: {
     updateAuth: (state, action) => {
+
       return {
         ...state,
         name: action?.payload?.name,
@@ -24,8 +28,18 @@ const autSlice = createSlice({
         token: action?.payload?.token,
       };
     },
+    logOut: () => {
+
+        deleteUserCookies();
+        return {
+            name: "",
+            email: "",
+            token: "",
+        };
+    }
+
   },
 });
 
-export const { updateAuth } = autSlice.actions;
+export const { updateAuth, logOut } = autSlice.actions;
 export default autSlice.reducer;
