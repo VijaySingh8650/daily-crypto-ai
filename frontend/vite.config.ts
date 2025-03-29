@@ -6,12 +6,13 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({mode})=>{
   
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
-  
+
   return {
   plugins: [tailwindcss(), react()],
   server: {
     port: 3000,
-  }
+  },
+  base:"/"
 }
 
 })
