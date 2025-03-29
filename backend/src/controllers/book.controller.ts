@@ -10,7 +10,7 @@ export const getAllBooks = async(req:Request, res:Response, next:NextFunction): 
 
         const books  = await Book.find({userId: req?.user?.userId}).populate("userId", "name email");
 
-        res.json(books);
+        res.status(200).json(books);
 
     }
     catch(err){
@@ -27,7 +27,7 @@ export const deleteTheBook = async(req:Request, res:Response, next:NextFunction)
         const deleteBook = await Book.findByIdAndDelete({_id:id});
 
         if(!deleteBook){
-            res.status(404).json({error: "Book not found"});
+            res.status(200).json({error: "Book not found", status: 404});
             return;
         }
 
@@ -51,7 +51,7 @@ export const addNewBook = async(req:Request, res:Response, next:NextFunction): P
          const validateSchema = bookRegistrationSchema.safeParse(req.body);
          
             if (!validateSchema.success) {
-                res.status(400).json({ message: validateSchema.error?.message });
+                res.status(200).json({ message: validateSchema.error?.message, status: 400 });
                 return;
             }
 
@@ -63,7 +63,8 @@ export const addNewBook = async(req:Request, res:Response, next:NextFunction): P
             userId: req?.user?.userId
         });
 
-        res.json({
+        res.status(201).json({
+            status: 201,
             message:"Book added successfully"
         });   
 
@@ -91,12 +92,12 @@ export const updateABook = async(req:Request, res:Response, next:NextFunction):P
  
         if(!updateTheBook){
  
-           res.status(404).json({message:"Book not found"});
+           res.status(200).json({message:"Book not found", status: 404});
            return;
  
         }
         
-        res.status(200).json({message:"Book Updated"});
+        res.status(200).json({status: 200, message:"Book Updated"});
 
     }
     catch(err){

@@ -16,7 +16,7 @@ export const register = async (
    const validateSchema = userRegistrationSchema.safeParse(req.body);
 
    if (!validateSchema.success) {
-       res.status(400).json({ message: validateSchema.error?.message });
+       res.status(200).json({ message: validateSchema.error?.message, status: 400});
        return;
    }
 
@@ -24,7 +24,7 @@ export const register = async (
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-       res.status(400).json({ message: 'User already exists' });
+       res.status(200).json({ message: 'User already exists', status: 400 });
        return;
     }
 
@@ -47,6 +47,7 @@ export const register = async (
     );
 
      res.status(201).json({
+      status: 201,
       message: 'User created successfully',
       token,
       user: {
@@ -77,7 +78,7 @@ export const login = async (
     const validateSchema = userLoginSchema.safeParse(req.body);
 
    if (!validateSchema.success) {
-       res.status(400).json({ message: validateSchema.error?.message });
+       res.status(200).json({ message: validateSchema.error?.message, status: 401 });
        return;
    }
     
@@ -86,14 +87,14 @@ export const login = async (
     const user = await User.findOne({ email});
 
     if (!user) {
-       res.status(401).json({ message: 'Invalid credentials' });
+       res.status(200).json({ message: 'Invalid credentials', status: 401 });
        return;
     }
 
         // Check password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-       res.status(401).json({ message: 'Invalid credentials' });
+       res.status(200).json({ message: 'Invalid credentials', status: 401 });
        return;
     }
 
@@ -105,7 +106,8 @@ export const login = async (
         { expiresIn: '1d' }
       );
   
-      res.json({
+      res.status(200).json({
+        status: 200,
         message: 'Logged in successfully',
         token,
         user: {
@@ -141,7 +143,7 @@ export const getProfile = async (
     const user = await User.findById(req?.user?.userId as string).select('-password');
     
     if (!user) {
-      res.status(404).json({ message: 'User not found' });
+      res.status(200).json({ message: 'User not found', status: 404 });
       return;
     }
 
